@@ -31,3 +31,5 @@ function clearTapLine() {
         drawLine(x, y - width, x, y + width, userCanvContext);
     }
 }
+
+clearTapLine();

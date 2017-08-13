@@ -15,24 +15,62 @@ function TapInspector(interval) {
 function Cycle(interval) {
     var metr = new Metronome(interval);
     var insp = new TapInspector(interval);
+    var intervalId = null;
     this.play = function () {
         clearTapLine();
         insp.reset();
         metr.play();
     };
-    this.start = function() {
-        $("#tapzone").click(insp.tap);
-        document.onkeydown = function () {
-            insp.tap();
-        };
+    function tap() {
+        insp.tap();
+    }
+    this.start = function () {
+        $("#tapzone").bind('click', tap);
+        $('body').bind('keydown', tap);
         this.play();
-        this.intervalId = setInterval(this.play, interval * 4);
+        intervalId = setInterval(this.play, interval * 4);
     };
     this.stop = function () {
-        $("#tapzone").off('click');
-        clearInterval(this.intervalId);
+        metr.stop();
+        $("#tapzone").unbind('click', tap);
+        $("body").unbind('keydown', tap);
+        clearInterval(intervalId);
     };
 }
 
-var c = new Cycle(1000);
-c.start();
+var game = {
+    cycle: null,
+    btn: {
+        elem: $('#playBtn'),
+        play: function () {
+            this.elem
+                .unbind('click', stopGame)
+                .html('Play')
+                [0].onclick = startGame; // .bind doesn't work
+        },
+        stop: function () {
+            this.elem
+                .unbind('click', startGame)
+                .html('Stop')
+                [0].onclick = stopGame; // .bind doesn't work
+        }
+    },
+    start: function () {
+        this.btn.stop();
+        this.cycle = new Cycle(1000);
+        this.cycle.start();
+    },
+    stop: function () {
+        this.btn.play();
+        this.cycle.stop();
+        delete this.cycle;
+    }
+};
+
+function startGame() {
+    game.start();
+}
+
+function stopGame() {
+    game.stop();
+}

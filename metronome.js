@@ -7,14 +7,18 @@ function weak() {
 }
 
 function Metronome(interval) {
+    var intervalId = null;
+    var shortIntervalId = null;
     this.play = function () {
         strong();
-        setTimeout(clearInterval, interval * 3, setInterval(weak, interval));
+        shortIntervalId = setInterval(weak, interval);
+        setTimeout(clearInterval, interval * 3, shortIntervalId);
     };
     this.start = function () {
-        this.intervalId = setInterval(this.play, interval * 4);
+        intervalId = setInterval(this.play, interval * 4);
     };
     this.stop = function () {
-        clearInterval(this.intervalId);
+        clearInterval(shortIntervalId);
+        clearInterval(intervalId);
     };
 }
