@@ -1,6 +1,6 @@
 function TapInspector(interval) {
     var startTime = Date.now();
-    const variation = {'easy': 30, 'middle': 15, 'hard': 5, 'super': 1}[$('input:radio[name="complexity"]:checked')[0].value]; //ms
+    const variation = {'easy': 30, 'middle': 15, 'hard': 5, 'super': 2}[$('input:radio[name="complexity"]:checked')[0].value]; //ms
     var lastTaps = [];
     this.tap = function () {
         var spentTime = Date.now() - startTime;
@@ -32,7 +32,9 @@ function Cycle(interval) {
         insp.reset();
         metr.play();
     };
-    function tap() {
+    var ignoredTags = new Set(['INPUT', 'BUTTON']);
+    function tap(event) {
+        if (ignoredTags.has(event.target.tagName)) return;
         insp.tap();
     }
     this.start = function () {
@@ -72,8 +74,6 @@ var game = {
     start: function () {
         this.btn.stop();
         var tempo = parseInt($('form[name="tempo"] > input')[0].value);
-        // alert(tempo);
-        // alert(typeof tempo);
         if (isNaN(tempo)) {
             $('form[name="tempo"] > input')[0].value = "60";
             tempo = 60;
@@ -91,10 +91,12 @@ var game = {
     }
 };
 
-function startGame() {
+function startGame(event) {
     game.start();
+    event.stopPropagation()
 }
 
-function stopGame() {
+function stopGame(event) {
     game.stop();
+    event.stopPropagation()
 }
