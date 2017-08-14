@@ -24,9 +24,9 @@ function drawTapCycle(intervalCount, valid) {
 
 function clearTapLine() {
     userCanvContext.clearRect(0, 0, usertaps.width, usertaps.height);
-    var lip = 10; //px
+    var lip = 30; //px
     drawLine(dx - lip, y, dx * 9 + lip, y, userCanvContext);
-    for (var i = 0, width = 8; i < 4; ++i) {
+    for (var i = 0, width = 8; i < 5; ++i) {
         var x = dx + dx * 2 * i;
         drawLine(x, y - width, x, y + width, userCanvContext);
     }

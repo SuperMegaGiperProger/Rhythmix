@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Rhythmix</title>
     <link rel="stylesheet" href="buttons.css">
+    <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
     <script src="metronome.js"></script>
 </head>
@@ -11,13 +12,64 @@
 <audio id="strongBeat" src="Audio/strongBeat.mp3"></audio>
 <audio id="weakBeat" src="Audio/weakBeat.mp3"></audio>
 <div id="tapzone" style="height: 100%; width: 100%" align="center">
+    <h1>Just hit the metronome!</h1>
     <table id="mainTable">
         <tr>
-            <td align="right" width="30%">
-                <button class="round" id="playBtn" type="button" onclick="startGame()">Play</button>
+            <td align="center" colspan="2" style="padding: 0">
+                <div id="tapLine" class="vertShift">
+                    <canvas id="usertaps" height="20" width="700"></canvas>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" width="50%">
+                <button class="round" id="playBtn" type="button"
+                        onclick="startGame()"
+                        onkeydown="event.preventDefault()"
+                        onkeypress="event.preventDefault()"
+                        onkeyup="event.preventDefault()"
+                ><b>Play</b>
+                </button>
             </td>
             <td align="left">
-                <canvas id="usertaps" height="20" width="700" style="width: 90%; max-width: 700px"></canvas>
+                <button class="round" id="setBtn" type="button"
+                        onclick="openSettings()"
+                        onkeydown="event.preventDefault()"
+                        onkeypress="event.preventDefault()"
+                        onkeyup="event.preventDefault()"
+                ><img src="Images/settings.png" style="position: relative; margin: 8px">
+                </button>
+                <script>
+                    function openSettings() {
+                        $("form.vertShift").css('height', '120px');
+                        $('#setBtn')
+                            .unbind('click', openSettings)
+                            .bind('click', closeSettings);
+                    }
+
+                    function closeSettings() {
+                        $("form.vertShift").css('height', '0px');
+                        $('#setBtn')
+                            .unbind('click', closeSettings)
+                            .bind('click', openSettings);
+                    }
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" width="50%" style="padding-right: 10px">
+                <form name="tempo" class="vertShift" onsubmit="stopGame(); startGame(); event.preventDefault()">
+                    <b>Tempo </b><input type="text" size="3" value="60" style="text-align: right"><b> bpm</b>
+                </form>
+            </td>
+            <td align="left" style="padding-left: 10px">
+                <form name="complexity" class="vertShift" onchange="stopGame(); startGame()">
+                    <b>Complexity</b><br>
+                    <input type="radio" name="complexity" value="easy" checked><b>Easy</b><br>
+                    <input type="radio" name="complexity" value="middle"><b>Middle</b><br>
+                    <input type="radio" name="complexity" value="hard"><b>Hard</b><br>
+                    <input type="radio" name="complexity" value="super"><b>Super Hard</b>
+                </form>
             </td>
         </tr>
     </table>

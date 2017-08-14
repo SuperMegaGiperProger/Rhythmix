@@ -1,0 +1,10 @@
+.vertShift {
+    transition-duration: 1s;
+    transition-property: all;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    text-overflow: clip;
+}
