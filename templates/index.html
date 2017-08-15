@@ -1,17 +1,18 @@
+{% load staticfiles %}
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Rhythmix</title>
-    <link rel="icon" href="Images/icon.png" type="image/png">
-    <link rel="stylesheet" href="buttons.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="{% static 'Images/icon.png' %}">
+    <link rel="stylesheet" href="{% static 'buttons.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
     <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
-    <script src="metronome.js"></script>
+    <script src="{% static 'metronome.js' %}"></script>
 </head>
 <body style="height: 100vh; width: 100vw; margin: 0">
-<audio id="strongBeat" src="Audio/strongBeat.mp3"></audio>
-<audio id="weakBeat" src="Audio/weakBeat.mp3"></audio>
+<audio id="strongBeat" src="{% static 'Audio/strongBeat.mp3' %}"></audio>
+<audio id="weakBeat" src="{% static 'Audio/weakBeat.mp3' %}"></audio>
 <div id="tapzone" style="height: 100%; width: 100%" align="center">
     <header>
         <h1>Just hit the metronome!</h1>
@@ -41,7 +42,7 @@
                             onkeydown="event.preventDefault()"
                             onkeypress="event.preventDefault()"
                             onkeyup="event.preventDefault()"
-                    ><img src="Images/settings.png" style="position: relative; margin: 8px">
+                    ><img src="../static/Images/settings.png" style="position: relative; margin: 8px">
                     </button>
                     <script>
                         function openSettings(event) {
@@ -80,8 +81,8 @@
                 </td>
             </tr>
         </table>
-        <script src="drawing.js"></script>
-        <script src="rhythm_trainer.js"></script>
+        <script src="{% static 'drawing.js' %}"></script>
+        <script src="{% static 'rhythm_trainer.js' %}"></script>
     </article>
     <footer>
         <p>There'll be more features soon</p>

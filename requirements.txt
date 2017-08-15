@@ -1,0 +1,4 @@
+Django==1.11.3
+gunicorn==19.7.1
+html5lib==0.999
+whitenoise==3.3.0
