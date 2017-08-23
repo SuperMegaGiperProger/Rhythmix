@@ -1,47 +1,59 @@
-function TapInspector(interval) {
+function TapInspector(interval, signature) {
     var startTime = Date.now();
-    const variation = {'easy': 30, 'middle': 15, 'hard': 5, 'super': 2}[$('input:radio[name="complexity"]:checked')[0].value]; //ms
+    interval = Math.round(interval);
+    const duplicate_part = 0.04; //experimentally; it must fill only line
+    const variation = {
+        'easy': 30,
+        'middle': 15,
+        'hard': 5,
+        'super': 2
+    }[$('input:radio[name="complexity"]:checked')[0].value]; //ms
     var lastTaps = [];
     this.tap = function () {
         var spentTime = Date.now() - startTime;
         var mod = spentTime % interval;
         var delta = Math.min(interval - mod, mod);
-        var intervalNum = spentTime / interval;
-        if (intervalNum > 3.8) {
-            drawTapCycle(intervalNum - 4.0, delta < variation);
-            lastTaps.push([intervalNum - 4.0, delta < variation]);
+        var part = spentTime / interval;
+        part /= signature.beats_num;
+        if (part > 1 - duplicate_part) {
+            drawTapCycle(part - 1.0, delta < variation);
+            lastTaps.push([part - 1.0, delta < variation]);
         }
-        drawTapCycle(intervalNum, delta < variation);
+        drawTapCycle(part, delta < variation);
     };
     this.reset = function () {
         lastTaps = [];
         startTime = Date.now();
     };
     this.drawLastTaps = function () {
-        lastTaps.forEach(function (elt) { drawTapCycle(elt[0], elt[1]); });
+        lastTaps.forEach(function (elt) {
+            drawTapCycle(elt[0], elt[1]);
+        });
     };
 }
 
-function Cycle(interval) {
-    var metr = new Metronome(interval);
-    var insp = new TapInspector(interval);
+function Cycle(interval, signature = {note_value: 4, beats_num: 4}) {
+    interval /= signature.note_value / 4;
+    var metr = new Metronome(interval, signature);
+    var insp = new TapInspector(interval, signature);
     var intervalId = null;
     this.play = function () {
-        clearTapLine();
+        clearTapLine(signature);
         insp.drawLastTaps();
         insp.reset();
         metr.play();
     };
-    var ignoredTags = new Set(['INPUT', 'BUTTON']);
     function tap(event) {
+        var ignoredTags = new Set(['INPUT', 'BUTTON']);
         if (ignoredTags.has(event.target.tagName)) return;
         insp.tap();
     }
+
     this.start = function () {
         $("#tapzone").bind('click', tap);
         $('body').bind('keydown', tap);
         this.play();
-        intervalId = setInterval(this.play, interval * 4);
+        intervalId = setInterval(this.play, interval * signature.beats_num);
     };
     this.stop = function () {
         metr.stop();
@@ -52,7 +64,7 @@ function Cycle(interval) {
 }
 
 var game = {
-    cycle: null,
+    cycle: undefined,
     btn: {
         elem: $('#playBtn'),
         cell: $('#tapLine'),
@@ -72,16 +84,21 @@ var game = {
         }
     },
     start: function () {
-        this.btn.stop();
-        var tempo = parseInt($('form[name="tempo"] > input')[0].value);
-        if (isNaN(tempo)) {
-            $('form[name="tempo"] > input')[0].value = "60";
-            tempo = 60;
-        } else if (tempo > 280) {
-            $('form[name="tempo"] > input')[0].value = "280";
-            tempo = 280;
+        function parseAndLimit(elem, min, mid, max) {
+            var num = parseFloat(elem.value);
+            if (isNaN(num)) elem.value = num = mid;
+            else if (num < min) elem.value = num = min;
+            else if (num > max) elem.value = num = max;
+            return num;
         }
-        this.cycle = new Cycle(1000 * 60 / tempo);
+
+        this.btn.stop();
+        var tempo = parseAndLimit($('form[name="tempo"] > input')[0], 10, 60, 280);
+        var signature = {
+            beats_num: parseAndLimit($('form[name="signature"] > input[name="beats_num"]')[0], 1, 4, 64),
+            note_value: parseAndLimit($('form[name="signature"] > input[name="note_value"]')[0], 1, 4, 64)
+        };
+        this.cycle = new Cycle(1000 * 60 / tempo, signature);
         this.cycle.start();
     },
     stop: function () {
@@ -91,12 +108,18 @@ var game = {
     }
 };
 
-function startGame(event) {
+function startGame() {
     game.start();
-    event.stopPropagation()
 }
 
-function stopGame(event) {
+function stopGame() {
     game.stop();
-    event.stopPropagation()
+}
+
+function reloadGame(event) {
+    if (game.cycle !== undefined) {
+        stopGame();
+        startGame();
+    }
+    event.stopPropagation();
 }

@@ -8,3 +8,13 @@
     overflow: hidden;
     text-overflow: clip;
 }
+
+input[type='text'] {
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+}
+
+form.settings {
+    margin: 10px;
+}

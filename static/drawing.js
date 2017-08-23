@@ -18,16 +18,17 @@ var dx = usertaps.width / 10;
 var y = usertaps.height / 2;
 var userCanvContext = usertaps.getContext('2d');
 
-function drawTapCycle(intervalCount, valid) {
-    drawCicle(dx + dx * 2 * intervalCount, y, 6, valid ? 'lime' : 'red', userCanvContext);
+function drawTapCycle(part, valid) {
+    drawCicle(dx + dx * 8 * part, y, 6, valid ? 'lime' : 'red', userCanvContext);
 }
 
-function clearTapLine() {
+function clearTapLine(signature = {note_value: 4, beats_num: 4}) {
     userCanvContext.clearRect(0, 0, usertaps.width, usertaps.height);
     var lip = 30; //px
     drawLine(dx - lip, y, dx * 9 + lip, y, userCanvContext);
-    for (var i = 0, width = 8; i < 5; ++i) {
-        var x = dx + dx * 2 * i;
+    var d = dx * 8 / signature.beats_num;
+    for (var i = 0, width = 8; i < signature.beats_num + 1; ++i) {
+        var x = dx + d * i;
         drawLine(x, y - width, x, y + width, userCanvContext);
     }
 }

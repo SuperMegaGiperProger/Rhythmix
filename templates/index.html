@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Rhythmix</title>
-    <meta name="keywords" content="rhythm trainer, rhythm, trainer, metronome, тренажер ритма, ритм, тренажер, метроном, rhythmix">
+    <meta name="keywords"
+          content="rhythm trainer, rhythm, trainer, metronome, тренажер ритма, ритм, тренажер, метроном, rhythmix">
     <meta name="description" content="Rhythm trainer : just hit the metronome !">
     <link rel="icon" type="image/png" href="{% static 'Images/icon.png' %}">
     <link rel="stylesheet" href="{% static 'buttons.css' %}">
@@ -19,7 +20,7 @@
     <header>
         <h1>Just hit the metronome!</h1>
     </header>
-    <article>
+    <article style="font-weight: bold">
         <table id="mainTable">
             <tr>
                 <td align="center" colspan="2" style="padding: 0">
@@ -30,7 +31,7 @@
             </tr>
             <tr>
                 <td align="right" width="50%">
-                    <button class="round" id="playBtn" type="button"
+                    <button class="round mainBtn" id="playBtn" type="button"
                             onclick="startGame(event)"
                             onkeydown="event.preventDefault()"
                             onkeypress="event.preventDefault()"
@@ -39,7 +40,7 @@
                     </button>
                 </td>
                 <td align="left">
-                    <button class="round" id="setBtn" type="button"
+                    <button class="round mainBtn" id="setBtn" type="button"
                             onclick="openSettings(event)"
                             onkeydown="event.preventDefault()"
                             onkeypress="event.preventDefault()"
@@ -66,20 +67,61 @@
                 </td>
             </tr>
             <tr>
-                <td align="right" width="50%" style="padding-right: 10px">
-                    <form name="tempo" class="vertShift"
-                          onsubmit="stopGame(event); startGame(event); event.preventDefault()">
-                        <b>Tempo </b><input type="text" size="3" value="60" style="text-align: right"><b> bpm</b>
-                    </form>
-                </td>
-                <td align="left" style="padding-left: 10px">
-                    <form name="complexity" class="vertShift" onchange="stopGame(event); startGame(event)">
-                        <b>Complexity</b><br>
-                        <input type="radio" name="complexity" value="easy" checked><b>Easy</b><br>
-                        <input type="radio" name="complexity" value="middle"><b>Middle</b><br>
-                        <input type="radio" name="complexity" value="hard"><b>Hard</b><br>
-                        <input type="radio" name="complexity" value="super"><b>Super Hard</b>
-                    </form>
+                <td align="center" width="100%" colspan="2">
+                    <table>
+                        <tr align="center">
+                            <td>
+                                <form name="tempo" class="vertShift settings"
+                                      onsubmit="reloadGame(event); event.preventDefault()">
+                                    Tempo
+                                    <br>
+                                    <input type="text" size="2" value="60" style="text-align: right"> bpm
+                                </form>
+                            </td>
+                            <td>
+                                <form name="complexity" class="vertShift settings" onchange="reloadGame(event)">
+                                    Complexity<br>
+                                    <div style="text-align: left">
+                                        <input type="radio" name="complexity" value="easy" checked>Easy<br>
+                                        <input type="radio" name="complexity" value="middle">Middle<br>
+                                        <input type="radio" name="complexity" value="hard">Hard<br>
+                                        <input type="radio" name="complexity" value="super">Super Hard
+                                    </div>
+                                </form>
+                            </td>
+                            <td>
+                                <form name="signature" class="vertShift settings"
+                                      onsubmit="reloadGame(event); event.preventDefault()"
+                                      onchange="reloadGame(event); event.preventDefault()"
+                                >
+                                    Signature
+                                    <br>
+                                    <script>
+                                        function reduce(event) {
+                                            if (event.explicitOriginalTarget !== event.currentTarget) return; //because form submit calls button(first form button) click
+                                            var input = event.currentTarget.nextSibling;
+                                            input.value -= 1;
+                                            event.preventDefault();
+                                            reloadGame(event);
+                                        }
+                                        function increase(event) {
+                                            var input = event.currentTarget.previousSibling;
+                                            input.value -= -1;
+                                            event.preventDefault();
+                                            reloadGame(event);
+                                        }
+                                    </script>
+                                    <button class="round smallBtn" onclick="reduce(event)">-</button
+                                    ><input  class="signature" type="text" name="beats_num" size="1" value="4"
+                                    ><button class="round smallBtn" onclick="increase(event)">+</button>
+                                    <br>
+                                    <button class="round smallBtn" onclick="reduce(event)">-</button
+                                    ><input  class="signature" type="text" name="note_value" size="1" value="4"
+                                    ><button class="round smallBtn" onclick="increase(event)">+</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
                 </td>
             </tr>
         </table>
@@ -88,9 +130,10 @@
     </article>
     <footer>
         <p>There'll be more features soon</p>
-        <p>Have question? Write here thrashmetalfan98@gmail.com</p>
+        <p>Have a question? Write here thrashmetalfan98@gmail.com</p>
         <p>This project is entirely open source. If you are a developer, consider contributing to this project <a
-                href="https://github.com/SuperMegaGiperProger/Rhythmix" target="_blank" onclick="stopGame()">here</a>.</p>
+                href="https://github.com/SuperMegaGiperProger/Rhythmix" target="_blank" onclick="stopGame()">here</a>.
+        </p>
     </footer>
 </div>
 </body>
