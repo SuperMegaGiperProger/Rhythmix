@@ -32,6 +32,8 @@ function TapInspector(interval, signature) {
     };
 }
 
+const CLICK = 'ontouchstart' in window ? 'touchstart' : 'click';
+
 function Cycle(interval, signature = {note_value: 4, beats_num: 4}) {
     interval /= signature.note_value / 4;
     var metr = new Metronome(interval, signature);
@@ -50,14 +52,14 @@ function Cycle(interval, signature = {note_value: 4, beats_num: 4}) {
     }
 
     this.start = function () {
-        $("#tapzone").bind('click', tap);
+        $("#tapzone").bind(CLICK, tap);
         $('body').bind('keydown', tap);
         this.play();
         intervalId = setInterval(this.play, interval * signature.beats_num);
     };
     this.stop = function () {
         metr.stop();
-        $("#tapzone").unbind('click', tap);
+        $("#tapzone").unbind(CLICK, tap);
         $("body").unbind('keydown', tap);
         clearInterval(intervalId);
     };
