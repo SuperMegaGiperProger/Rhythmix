@@ -1,10 +1,8 @@
 .vertShift {
-    transition-duration: 1s;
-    transition-property: all;
+    transition: all 1s;
+    transform: scaleY(0);
     height: 0;
-    margin: 0;
-    padding: 0;
-    border: 0;
+    transform-origin: 0 0;
     overflow: hidden;
     text-overflow: clip;
 }
@@ -15,6 +13,90 @@ input[type='text'] {
     margin-top: 10px;
 }
 
-form.settings {
+footer {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+}
+
+body {
+    text-align: center;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+#settings {
+    clear: both;
+    /*position: relative;*/
+    text-align: center;
+    width: auto;
+    display: inline-block;
+}
+
+#settings > form {
+    /*position: relative;*/
+    float: left;
+    display: block;
+    width: auto;
+    border: solid black 1px;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 10px 20px;
+}
+
+.round {
+    border-radius: 50%;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding: 0;
+    outline: none;
+}
+
+button:focus, button:active {
+    outline: none;
+}
+
+.smallBtn {
+    height: 20px;
+    width: 20px;
+    font-size: 15px;
+    margin: 5px;
+}
+
+#mainBtns {
+    width: auto;
+    display: inline-block;
+}
+
+#mainBtns > button {
+    float: left;
+    height: 50px;
+    width: 50px;
+    font-size: 16px;
     margin: 10px;
+}
+
+.clear:after {
+    clear: both;
+    content: "";
+    display: block;
+    width: 100%;
+    height: 0;
+    line-height: 0;
+    visibility: hidden;
+}
+
+@media screen and (max-width: 720px) {
+    #settings > form {
+        width: 170px;
+        float: none;
+        clear: both;
+    }
 }

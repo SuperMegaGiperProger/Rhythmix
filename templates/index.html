@@ -8,133 +8,92 @@
           content="rhythm trainer, rhythm, trainer, metronome, тренажер ритма, ритм, тренажер, метроном, rhythmix">
     <meta name="description" content="Rhythm trainer : just hit the metronome !">
     <link rel="icon" type="image/png" href="{% static 'Images/icon.png' %}">
-    <link rel="stylesheet" href="{% static 'buttons.css' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
     <script src="{% static 'metronome.js' %}"></script>
 </head>
-<body style="height: 100vh; width: 100vw; margin: 0">
+<body>
 <audio id="strongBeat" src="{% static 'Audio/strongBeat.mp3' %}"></audio>
 <audio id="weakBeat" src="{% static 'Audio/weakBeat.mp3' %}"></audio>
-<div id="tapzone" style="height: 100%; width: 100%" align="center">
-    <header>
-        <h1>Just hit the metronome!</h1>
-    </header>
-    <article style="font-weight: bold">
-        <table id="mainTable">
-            <tr>
-                <td align="center" colspan="2" style="padding: 0">
-                    <div id="tapLine" class="vertShift">
-                        <canvas id="usertaps" height="20" width="700"></canvas>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td align="right" width="50%">
-                    <button class="round mainBtn" id="playBtn" type="button"
-                            onclick="startGame(event)"
-                            onkeydown="event.preventDefault()"
-                            onkeypress="event.preventDefault()"
-                            onkeyup="event.preventDefault()"
-                    ><b>Play</b>
-                    </button>
-                </td>
-                <td align="left">
-                    <button class="round mainBtn" id="setBtn" type="button"
-                            onclick="openSettings(event)"
-                            onkeydown="event.preventDefault()"
-                            onkeypress="event.preventDefault()"
-                            onkeyup="event.preventDefault()"
-                    ><img src="../static/Images/settings.png" style="position: relative; margin: 8px">
-                    </button>
-                    <script>
-                        function openSettings(event) {
-                            $("form.vertShift").css('height', '120px');
-                            $('#setBtn')
-                                .unbind('click', openSettings)
-                                .bind('click', closeSettings);
-                            event.stopPropagation()
-                        }
+<header>
+    <h2 style="word-wrap: break-word">Just hit the metronome!</h2>
+</header>
+<article class="bold">
+    <div id="tapLine" class="vertShift clear">
+        <canvas id="usertaps" height="20" width="500"></canvas>
+    </div>
+    <div class="clear">
+        <div id="mainBtns">
+            <button class="round" id="playBtn" type="button"
+                    onclick="startGame(event)"
+                    onkeydown="event.preventDefault()"
+                    onkeypress="event.preventDefault()"
+                    onkeyup="event.preventDefault()"
+            ><b>Play</b></button>
+            <button class="round" id="setBtn" type="button"
+                    onclick="openSettings(event)"
+                    onkeydown="event.preventDefault()"
+                    onkeypress="event.preventDefault()"
+                    onkeyup="event.preventDefault()"
+            ><img src="../static/Images/settings.png" style="position: relative; margin: 8px"></button>
+        </div>
+    </div>
+    <div id="settings" class="vertShift clear">
+        <form name="tempo" onsubmit="reloadGame(event); event.preventDefault()">
+            Tempo<br>
+            <input type="text" size="2" value="60" style="text-align: right"> bpm
+        </form>
+        <form name="complexity" onchange="reloadGame(event)">
+            Complexity<br>
+            <div style="text-align: left">
+                <input type="radio" name="complexity" value="easy" checked>Easy<br>
+                <input type="radio" name="complexity" value="middle">Middle<br>
+                <input type="radio" name="complexity" value="hard">Hard<br>
+                <input type="radio" name="complexity" value="super">Super Hard
+            </div>
+        </form>
+        <form name="signature"
+              onsubmit="reloadGame(event); event.preventDefault()"
+              onchange="reloadGame(event); event.preventDefault()"
+        >
+            Signature
+            <br>
+            <script>
+                function reduce(event) {
+                    if (event.explicitOriginalTarget !== event.currentTarget) return; //because form submit calls button(first form button) click
+                    var input = event.currentTarget.parentNode.getElementsByTagName('input')[0];
+                    input.value -= 1;
+                    event.preventDefault();
+                    reloadGame(event);
+                }
 
-                        function closeSettings(event) {
-                            $("form.vertShift").css('height', '0px');
-                            $('#setBtn')
-                                .unbind('click', closeSettings)
-                                .bind('click', openSettings);
-                            event.stopPropagation()
-                        }
-                    </script>
-                </td>
-            </tr>
-            <tr>
-                <td align="center" width="100%" colspan="2">
-                    <table>
-                        <tr align="center">
-                            <td>
-                                <form name="tempo" class="vertShift settings"
-                                      onsubmit="reloadGame(event); event.preventDefault()">
-                                    Tempo
-                                    <br>
-                                    <input type="text" size="2" value="60" style="text-align: right"> bpm
-                                </form>
-                            </td>
-                            <td>
-                                <form name="complexity" class="vertShift settings" onchange="reloadGame(event)">
-                                    Complexity<br>
-                                    <div style="text-align: left">
-                                        <input type="radio" name="complexity" value="easy" checked>Easy<br>
-                                        <input type="radio" name="complexity" value="middle">Middle<br>
-                                        <input type="radio" name="complexity" value="hard">Hard<br>
-                                        <input type="radio" name="complexity" value="super">Super Hard
-                                    </div>
-                                </form>
-                            </td>
-                            <td>
-                                <form name="signature" class="vertShift settings"
-                                      onsubmit="reloadGame(event); event.preventDefault()"
-                                      onchange="reloadGame(event); event.preventDefault()"
-                                >
-                                    Signature
-                                    <br>
-                                    <script>
-                                        function reduce(event) {
-                                            if (event.explicitOriginalTarget !== event.currentTarget) return; //because form submit calls button(first form button) click
-                                            var input = event.currentTarget.nextSibling;
-                                            input.value -= 1;
-                                            event.preventDefault();
-                                            reloadGame(event);
-                                        }
-                                        function increase(event) {
-                                            var input = event.currentTarget.previousSibling;
-                                            input.value -= -1;
-                                            event.preventDefault();
-                                            reloadGame(event);
-                                        }
-                                    </script>
-                                    <button class="round smallBtn" onclick="reduce(event)">-</button
-                                    ><input  class="signature" type="text" name="beats_num" size="1" value="4"
-                                    ><button class="round smallBtn" onclick="increase(event)">+</button>
-                                    <br>
-                                    <button class="round smallBtn" onclick="reduce(event)">-</button
-                                    ><input  class="signature" type="text" name="note_value" size="1" value="4"
-                                    ><button class="round smallBtn" onclick="increase(event)">+</button>
-                                </form>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-        <script src="{% static 'drawing.js' %}"></script>
-        <script src="{% static 'rhythm_trainer.js' %}"></script>
-    </article>
-    <footer>
-        <p>There'll be more features soon</p>
-        <p>Have a question? Write here thrashmetalfan98@gmail.com</p>
-        <p>This project is entirely open source. If you are a developer, consider contributing to this project <a
-                href="https://github.com/SuperMegaGiperProger/Rhythmix" target="_blank" onclick="stopGame()">here</a>.
-        </p>
-    </footer>
-</div>
+                function increase(event) {
+                    var input = event.currentTarget.parentNode.getElementsByTagName('input')[0];
+                    input.value -= -1;
+                    event.preventDefault();
+                    reloadGame(event);
+                }
+            </script>
+            <div>
+                <button class="round smallBtn" onclick="reduce(event)">-</button>
+                <input class="signature" type="text" name="beats_num" size="1" value="4">
+                <button class="round smallBtn" onclick="increase(event)">+</button>
+            </div>
+            <div>
+                <button class="round smallBtn" onclick="reduce(event)">-</button>
+                <input class="signature" type="text" name="note_value" size="1" value="4">
+                <button class="round smallBtn" onclick="increase(event)">+</button>
+            </div>
+        </form>
+    </div>
+    <script src="{% static 'drawing.js' %}"></script>
+    <script src="{% static 'rhythm_trainer.js' %}"></script>
+</article>
+<footer>
+    There'll be more features soon<br>
+    Have a question? Write here thrashmetalfan98@gmail.com<br>
+    This project is entirely open source. If you are a developer, consider contributing to this project <a
+        href="https://github.com/SuperMegaGiperProger/Rhythmix" target="_blank" onclick="stopGame()">here</a>.
+</footer>
 </body>
 </html>
