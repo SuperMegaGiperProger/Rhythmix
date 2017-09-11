@@ -3,16 +3,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rhythmix</title>
     <meta name="keywords"
           content="rhythm trainer, rhythm, trainer, metronome, тренажер ритма, ритм, тренажер, метроном, rhythmix">
     <meta name="description" content="Rhythm trainer : just hit the metronome !">
     <link rel="icon" type="image/png" href="{% static 'Images/icon.png' %}">
     <link rel="stylesheet" href="{% static 'style.css' %}">
-    <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
+    <script src="{% static 'jquery.min.js' %}"></script>
     <script src="{% static 'metronome.js' %}"></script>
 </head>
-<body>
+<body onresize="fullUserTapsLine()">
 <audio id="strongBeat" src="{% static 'Audio/strongBeat.mp3' %}"></audio>
 <audio id="weakBeat" src="{% static 'Audio/weakBeat.mp3' %}"></audio>
 <header>
@@ -20,7 +21,7 @@
 </header>
 <article class="bold">
     <div id="tapLine" class="vertShift clear">
-        <canvas id="usertaps" height="20" width="500"></canvas>
+        <canvas id="usertaps" height="30" width="700" style="max-width: 700px"></canvas>
     </div>
     <div class="clear">
         <div id="mainBtns">
@@ -44,8 +45,8 @@
             <input type="text" size="2" value="60" style="text-align: right"> bpm
         </form>
         <form name="complexity" onchange="reloadGame(event)">
-            Complexity<br>
-            <div style="text-align: left">
+            Complexity<br style="margin-bottom: 10px">
+            <div style="text-align: left; display: inline-block">
                 <input type="radio" name="complexity" value="easy" checked>Easy<br>
                 <input type="radio" name="complexity" value="middle">Middle<br>
                 <input type="radio" name="complexity" value="hard">Hard<br>

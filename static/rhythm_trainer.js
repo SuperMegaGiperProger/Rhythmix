@@ -45,6 +45,10 @@ function TapInspector(interval, signature, pattern) {
 }
 
 const CLICK = 'ontouchstart' in window ? 'touchstart' : 'click';
+// if ('ontouchstart' in window) {
+//     document.ondouble
+// }
+
 
 function Cycle(interval, signature = {note_value: 4, beats_num: 4}, pattern = null) {
     if (pattern === null) {
@@ -120,7 +124,7 @@ var game = {
                 .unbind('click', startGame)
                 .html('<b>Stop</b>')
                 [0].onclick = stopGame; // .bind doesn't work
-            show(this.cell, '20px');
+            show(this.cell, '30px');
         }
     },
     start: function () {

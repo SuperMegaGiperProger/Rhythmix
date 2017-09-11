@@ -1,3 +1,15 @@
+function scaleByWidth(elem, width) {
+    var prop = elem.offsetHeight / elem.offsetWidth;
+    elem.style.width = width;
+    elem.style.height = width * prop;
+}
+
+function fullUserTapsLine() {
+    scaleByWidth(document.getElementById('usertaps'), '100%');
+}
+
+fullUserTapsLine();
+
 function hide(jqelem) {
     jqelem
         .css('transform', 'scaleY(0)')
@@ -30,7 +42,7 @@ function drawLine(x1, y1, x2, y2, colour, context) {
     context.beginPath();
     context.moveTo(x1, y1);
     context.lineTo(x2, y2);
-    context.lineWidth = 2;
+    context.lineWidth = 3;
     context.strokeStyle = colour;
     context.stroke();
 }
@@ -59,13 +71,13 @@ function clearTapLine(signature, pattern) {
     drawLine(dx - lip, y, dx * 9 + lip, y, 'black', userCanvContext);
     var d = tap_line_length / signature.beats_num;
 
-    function drawMetrBeats(width = 3) {
+    function drawMetrBeats(width = 5) {
         for (var i = 0; i < signature.beats_num + 1; ++i) {
             var x = dx + d * i;
             drawLine(x, y - width, x, y + width, 'black', userCanvContext);
         }
     }
-    function drawPattern(pattern, width = 8) {
+    function drawPattern(pattern, width = 30) {
         for (var i in pattern) {
             var x = pattern[i] * tap_line_length + dx;
             drawLine(x, y - width, x, y + width, 'LightSeaGreen', userCanvContext);

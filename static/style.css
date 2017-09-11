@@ -18,10 +18,23 @@ footer {
     bottom: 10px;
     left: 0;
     right: 0;
+    z-index: 0;
+}
+
+article {
+    position: relative;
+    z-index: 1;
+}
+
+#tapLine {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    filter: blur(0);
 }
 
 body {
     text-align: center;
+    min-width: 330px;
 }
 
 .bold {
@@ -38,6 +51,7 @@ body {
 
 #settings > form {
     /*position: relative;*/
+    background-color: white;
     float: left;
     display: block;
     width: auto;
@@ -93,10 +107,30 @@ button:focus, button:active {
     visibility: hidden;
 }
 
-@media screen and (max-width: 720px) {
+@media (max-width: 780px) {
+    #mainBtns {
+        transform: scale(1.2);
+    }
+
+    #settings {
+        font-size: 20px;
+    }
+
+    .smallBtn {
+        width: 25px;
+        height: 25px;
+        font-size: 20px;
+    }
+
     #settings > form {
-        width: 170px;
+        width: 250px;
         float: none;
         clear: both;
+        margin: 10px;
+    }
+
+    input[type='text'] {
+        font-size: 20px;
+        height: 30px;
     }
 }
