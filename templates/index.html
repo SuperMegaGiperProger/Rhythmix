@@ -25,24 +25,24 @@
     </div>
     <div class="clear">
         <div id="mainBtns">
-            <button class="round" id="playBtn" type="button"
+            <a class="round" id="playBtn" style="padding-top: 15px; padding-bottom: 15px; height: 20px"
                     onclick="startGame(event)"
                     onkeydown="event.preventDefault()"
                     onkeypress="event.preventDefault()"
                     onkeyup="event.preventDefault()"
-            ><b>Play</b></button>
-            <button class="round" id="templateBtn" type="button" style="display: none"
+            ><b>Play</b></a>
+            <a class="round" id="templateBtn"  style=""
                     onclick="openTemplates(event)"
                     onkeydown="event.preventDefault()"
                     onkeypress="event.preventDefault()"
                     onkeyup="event.preventDefault()"
-            ><img src="../static/Images/templates.png" style="position: relative; margin: 8px"></button>
-            <button class="round" id="setBtn" type="button"
+            ><img src="../static/Images/templates.png" style="position: relative; margin: 8px"></a>
+            <a class="round" id="setBtn"
                     onclick="openSettings(event)"
                     onkeydown="event.preventDefault()"
                     onkeypress="event.preventDefault()"
                     onkeyup="event.preventDefault()"
-            ><img src="../static/Images/settings.png" style="position: relative; margin: 8px"></button>
+            ><img src="../static/Images/settings.png" style="position: relative; margin: 8px"></a>
         </div>
     </div>
     <div id="settings" class="vertShift clear">
@@ -82,14 +82,14 @@
                 }
             </script>
             <div>
-                <button class="round smallBtn" onclick="reduce(event)">-</button>
+                <a class="round smallBtn" onclick="reduce(event)">-</a>
                 <input class="signature" type="text" name="beats_num" size="1" value="4">
-                <button class="round smallBtn" onclick="increase(event)">+</button>
+                <a class="round smallBtn" onclick="increase(event)">+</a>
             </div>
             <div>
-                <button class="round smallBtn" onclick="reduce(event)">-</button>
+                <a class="round smallBtn" onclick="reduce(event)">-</a>
                 <input class="signature" type="text" name="note_value" size="1" value="4">
-                <button class="round smallBtn" onclick="increase(event)">+</button>
+                <a class="round smallBtn" onclick="increase(event)">+</a>
             </div>
         </form>
     </div>

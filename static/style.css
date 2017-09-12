@@ -73,7 +73,7 @@ body {
     outline: none;
 }
 
-button:focus, button:active {
+a:focus, a:active {
     outline: none;
 }
 
@@ -89,12 +89,16 @@ button:focus, button:active {
     display: inline-block;
 }
 
-#mainBtns > button {
+#mainBtns > a {
     float: left;
     height: 50px;
     width: 50px;
     font-size: 16px;
     margin: 10px;
+}
+
+#playBtn > div {
+    position: relative;
 }
 
 .clear:after {
