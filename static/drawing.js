@@ -38,6 +38,22 @@ function closeSettings(event) {
     event.stopPropagation()
 }
 
+function openTemplates(event) {
+    show($('#templates'));
+    $('#templateBtn')
+        .unbind('click', openTemplates)
+        .bind('click', closeTemplates);
+    event.stopPropagation()
+}
+
+function closeTemplates(event) {
+    hide($("#templates"));
+    $('#templateBtn')
+        .unbind('click', closeTemplates)
+        .bind('click', openTemplates);
+    event.stopPropagation()
+}
+
 function drawLine(x1, y1, x2, y2, colour, context) {
     context.beginPath();
     context.moveTo(x1, y1);

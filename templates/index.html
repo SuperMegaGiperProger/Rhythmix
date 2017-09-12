@@ -31,6 +31,12 @@
                     onkeypress="event.preventDefault()"
                     onkeyup="event.preventDefault()"
             ><b>Play</b></button>
+            <button class="round" id="templateBtn" type="button" style="display: none"
+                    onclick="openTemplates(event)"
+                    onkeydown="event.preventDefault()"
+                    onkeypress="event.preventDefault()"
+                    onkeyup="event.preventDefault()"
+            ><img src="../static/Images/templates.png" style="position: relative; margin: 8px"></button>
             <button class="round" id="setBtn" type="button"
                     onclick="openSettings(event)"
                     onkeydown="event.preventDefault()"
@@ -86,6 +92,13 @@
                 <button class="round smallBtn" onclick="increase(event)">+</button>
             </div>
         </form>
+    </div>
+    <div id="templates" class="clear vertShift">
+        <div class="template" onclick="reloadGame(event, {0:[1], 2:[1], 3:[1]})">
+            <img src="{% static 'Images/Notes/2.png' %}">
+            <img src="{% static 'Images/Notes/4.png' %}">
+            <img src="{% static 'Images/Notes/8.png' %}">
+        </div>
     </div>
     <script src="{% static 'drawing.js' %}"></script>
     <script src="{% static 'rhythm_trainer.js' %}"></script>

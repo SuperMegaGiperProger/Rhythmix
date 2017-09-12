@@ -13,10 +13,10 @@ function TapInspector(interval, signature, pattern) {
     interval = Math.round(interval);
     const duplicate_part = 0.04; //experimentally; it must fill only line
     const variation = {
-        'easy': 30,
-        'middle': 15,
-        'hard': 5,
-        'super': 2
+        'easy': 50,
+        'middle': 30,
+        'hard': 15,
+        'super': 5
     }[$('input:radio[name="complexity"]:checked')[0].value]; //ms
     var lastTaps = [];
     var prevBeatNum = 0;
@@ -73,6 +73,9 @@ function Cycle(interval, signature = {note_value: 4, beats_num: 4}, pattern = nu
                 for (var key in lin_pat) lin_pat[key] = lin_pat[key].concat(new_lin_pat[key]);
             }
         }
+        if (lin_pat['time'] !== []) {
+            lin_pat['time'].push(lin_pat['time'][0] + interval * signature.beats_num);
+        }
         return lin_pat;
     }
 
@@ -92,6 +95,7 @@ function Cycle(interval, signature = {note_value: 4, beats_num: 4}, pattern = nu
         if (ignoredTags.has(event.target.tagName)) return;
         insp.tap();
     }
+
     var tapzone = $(document);
     this.start = function () {
         tapzone.bind(CLICK, tap);
@@ -109,7 +113,8 @@ function Cycle(interval, signature = {note_value: 4, beats_num: 4}, pattern = nu
 
 var game = {
     cycle: undefined,
-    btn: {
+    template: null,
+    playBtn: {
         elem: $('#playBtn'),
         cell: $('#tapLine'),
         play: function () {
@@ -136,18 +141,18 @@ var game = {
             return num;
         }
 
-        this.btn.stop();
+        this.playBtn.stop();
         var tempo = parseAndLimit($('form[name="tempo"] > input')[0], 10, 60, 280);
         var form = $('form[name="signature"]');
         var signature = {
             beats_num: parseAndLimit(form.find('input[name="beats_num"]')[0], 1, 4, 64),
             note_value: parseAndLimit(form.find('input[name="note_value"]')[0], 1, 4, 64)
         };
-        this.cycle = new Cycle(1000 * 60 / tempo, signature);
+        this.cycle = new Cycle(1000 * 60 / tempo, signature, this.template);
         this.cycle.start();
     },
     stop: function () {
-        this.btn.play();
+        this.playBtn.play();
         this.cycle.stop();
         delete this.cycle;
     }
@@ -161,10 +166,11 @@ function stopGame() {
     game.stop();
 }
 
-function reloadGame(event) {
+function reloadGame(event, template = null) {
+    event.stopPropagation();
+    game.template = template;
     if (game.cycle !== undefined) {
         stopGame();
-        startGame();
+        startGame(template);
     }
-    event.stopPropagation();
 }

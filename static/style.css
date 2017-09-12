@@ -107,6 +107,21 @@ button:focus, button:active {
     visibility: hidden;
 }
 
+.template {
+    background-color: white;
+    display: inline-block;
+    border: solid black 1px;
+    border-radius: 10px;
+    margin: 5px;
+    padding: 10px 20px;
+    height: 50px;
+    width: 200px;
+}
+
+.template > img {
+    height: 40px;
+}
+
 @media (max-width: 780px) {
     #mainBtns {
         transform: scale(1.2);
