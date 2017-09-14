@@ -81,7 +81,7 @@ function drawTapCycle(part, valid) {
     drawCicle(dx + tap_line_length * part, y, 6, valid ? 'lime' : 'red', userCanvContext);
 }
 
-function clearTapLine(signature, pattern) {
+function clearTapLine(signature, part_pattern) {
     userCanvContext.clearRect(0, 0, usertaps.width, usertaps.height);
     var lip = 30; //px
     drawLine(dx - lip, y, dx * 9 + lip, y, 'black', userCanvContext);
@@ -93,12 +93,12 @@ function clearTapLine(signature, pattern) {
             drawLine(x, y - width, x, y + width, 'black', userCanvContext);
         }
     }
-    function drawPattern(pattern, width = 30) {
-        for (var i in pattern) {
-            var x = pattern[i] * tap_line_length + dx;
+    function drawPattern(part_pattern, width = 30) {
+        for (var i in part_pattern) {
+            var x = part_pattern[i] * tap_line_length + dx;
             drawLine(x, y - width, x, y + width, 'LightSeaGreen', userCanvContext);
         }
     }
-    drawPattern(pattern);
+    drawPattern(part_pattern);
     drawMetrBeats();
 }

@@ -1,5 +1,5 @@
-function TapInspector(interval, signature, pattern) {
-    function search(val, left = 0, arr = pattern, right = arr.length - 1) { //it must be replaced on O(1) search !!!!!!
+function TapInspector(interval, signature, time_pattern) {
+    function search(val, left = 0, arr = time_pattern, right = arr.length - 1) { //it must be replaced on O(1) search !!!!!!
         while (left < right) {
             var mid = (left + right) / 2;
             mid = Math.floor(mid);
@@ -23,7 +23,7 @@ function TapInspector(interval, signature, pattern) {
     this.tap = function () {
         var spentTime = Date.now() - startTime;
         prevBeatNum = search(spentTime, prevBeatNum);
-        var delta = Math.abs(pattern[prevBeatNum] - spentTime);
+        var delta = Math.abs(time_pattern[prevBeatNum] - spentTime);
         var part = spentTime / interval;
         part /= signature.beats_num;
         if (part > 1 - duplicate_part) {
@@ -50,41 +50,40 @@ const CLICK = 'ontouchstart' in window ? 'touchstart' : 'click';
 // }
 
 
-function Cycle(interval, signature = {note_value: 4, beats_num: 4}, pattern = null) {
-    if (pattern === null) {
-        pattern = {};
-        for (var i = 0; i < signature.beats_num; ++i) {
-            pattern[i] = [1];
+function Cycle(interval, signature = {note_value: 4, beats_num: 4}, pattern = undefined) {
+    function getMetrPattern() { // metronome beats pattern
+        var notes = [];
+        for (var i = 0; i < signature.beats_num - 1; ++i) {
+            notes.push(signature.note_value);
         }
+        if (Number.isInteger(signature.beats_num)) notes.push(signature.note_value);
+        else notes.push(signature.note_value / (signature.beats_num - Math.floor(signature.beats_num)));
+        return {notes: notes};
     }
-    interval /= signature.note_value / 4;
+
+    if (pattern === undefined) pattern = getMetrPattern();
     const duration = interval * signature.beats_num;
 
-    function getLinearPattern(pattern, interval, time = 0) {
-        var lin_pat = {'time': [], 'part': []};
-        for (var part_num in pattern) {
-            var subpattern = pattern[part_num];
-            if (subpattern[0] === 1) {
-                var beat_time = time + part_num * interval;
-                lin_pat['time'].push(beat_time);
-                lin_pat['part'].push(beat_time / duration);
-            } else {
-                var new_lin_pat = getLinearPattern(subpattern[1], interval / subpattern[0], time + part_num * interval);
-                for (var key in lin_pat) lin_pat[key] = lin_pat[key].concat(new_lin_pat[key]);
-            }
+    pattern.getTimeNPart = function () {
+        this.time = [];
+        this.part = [];
+        var curr_time = 0;
+        for (var note in this.notes) {
+            this.time.push(curr_time);
+            this.part.push(curr_time / duration);
+            curr_time += interval * signature.note_value / this.notes[note];
         }
-        if (lin_pat['time'] !== []) {
-            lin_pat['time'].push(lin_pat['time'][0] + interval * signature.beats_num);
-        }
-        return lin_pat;
-    }
+        this.time.push(duration);
+        this.time.push(1.0);
+    };
 
-    pattern = getLinearPattern(pattern, interval);
+    pattern.getTimeNPart();
+
     var metr = new Metronome(interval, signature);
-    var insp = new TapInspector(interval, signature, pattern['time']);
+    var insp = new TapInspector(interval, signature, pattern.time);
     var intervalId = null;
     this.play = function () {
-        clearTapLine(signature, pattern['part']);
+        clearTapLine(signature, pattern.part);
         insp.drawLastTaps();
         insp.reset();
         metr.play();
@@ -101,7 +100,7 @@ function Cycle(interval, signature = {note_value: 4, beats_num: 4}, pattern = nu
         tapzone.bind(CLICK, tap);
         $(document).bind('keydown', tap);
         this.play();
-        intervalId = setInterval(this.play, interval * signature.beats_num);
+        intervalId = setInterval(this.play, duration);
     };
     this.stop = function () {
         metr.stop();
@@ -113,7 +112,7 @@ function Cycle(interval, signature = {note_value: 4, beats_num: 4}, pattern = nu
 
 var game = {
     cycle: undefined,
-    template: null,
+    pattern: undefined,
     playBtn: {
         elem: $('#playBtn'),
         cell: $('#tapLine'),
@@ -148,7 +147,7 @@ var game = {
             beats_num: parseAndLimit(form.find('input[name="beats_num"]')[0], 1, 4, 64),
             note_value: parseAndLimit(form.find('input[name="note_value"]')[0], 1, 4, 64)
         };
-        this.cycle = new Cycle(1000 * 60 / tempo, signature, this.template);
+        this.cycle = new Cycle(1000 * 60 / tempo, signature, this.pattern);
         this.cycle.start();
     },
     stop: function () {
@@ -166,11 +165,11 @@ function stopGame() {
     game.stop();
 }
 
-function reloadGame(event, template = null) {
+function reloadGame(event, note_pattern = undefined) {
     event.stopPropagation();
-    game.template = template;
+    game.pattern = {notes: note_pattern};
     if (game.cycle !== undefined) {
         stopGame();
-        startGame(template);
+        startGame();
     }
 }
