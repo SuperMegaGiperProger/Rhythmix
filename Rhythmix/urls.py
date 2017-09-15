@@ -16,16 +16,18 @@ Including another URLconf
 from django.conf.urls import url
 from django.shortcuts import render
 from django.views.static import serve
+from django.contrib import admin
 
+from Rhythmix.patterns.models import Pattern
 
 def app(request):
-    return render(request, "index.html")
+    return render(request, "index.html", {'patterns': [{'notes': pattern.notes.split(' ')} for pattern in Pattern.objects.all()]})
 
 
 import Rhythmix.settings
 
 urlpatterns = [
-    # url(r'^admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
     url(r'^$', app),
     url(r'^static/', serve, {'document_root': Rhythmix.settings.STATIC_ROOT}),
 ]

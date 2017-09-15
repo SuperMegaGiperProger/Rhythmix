@@ -26,22 +26,22 @@
     <div class="clear">
         <div id="mainBtns">
             <a class="round" id="playBtn" style="padding-top: 15px; padding-bottom: 15px; height: 20px"
-                    onclick="startGame(event)"
-                    onkeydown="event.preventDefault()"
-                    onkeypress="event.preventDefault()"
-                    onkeyup="event.preventDefault()"
+               onclick="startGame(event)"
+               onkeydown="event.preventDefault()"
+               onkeypress="event.preventDefault()"
+               onkeyup="event.preventDefault()"
             ><b>Play</b></a>
-            <a class="round" id="templateBtn"  style=""
-                    onclick="openTemplates(event)"
-                    onkeydown="event.preventDefault()"
-                    onkeypress="event.preventDefault()"
-                    onkeyup="event.preventDefault()"
+            <a class="round" id="templateBtn" style=""
+               onclick="openTemplates(event)"
+               onkeydown="event.preventDefault()"
+               onkeypress="event.preventDefault()"
+               onkeyup="event.preventDefault()"
             ><img src="../static/Images/templates.png" style="position: relative; margin: 8px"></a>
             <a class="round" id="setBtn"
-                    onclick="openSettings(event)"
-                    onkeydown="event.preventDefault()"
-                    onkeypress="event.preventDefault()"
-                    onkeyup="event.preventDefault()"
+               onclick="openSettings(event)"
+               onkeydown="event.preventDefault()"
+               onkeypress="event.preventDefault()"
+               onkeyup="event.preventDefault()"
             ><img src="../static/Images/settings.png" style="position: relative; margin: 8px"></a>
         </div>
     </div>
@@ -94,11 +94,17 @@
         </form>
     </div>
     <div id="templates" class="clear vertShift">
-        <div class="template" onclick="reloadGame(event, [2, 4, 8])">
-            <img src="{% static 'Images/Notes/2.png' %}">
-            <img src="{% static 'Images/Notes/4.png' %}">
-            <img src="{% static 'Images/Notes/8.png' %}">
-        </div>
+        <ul style="list-style-type: none; padding: 0; margin: 0">
+            {% for pattern in patterns %}
+                <li>
+                    <div class="template" onclick="reloadGame(event, {{ pattern.notes }})">
+                        {% for note in pattern.notes %}
+                            <img src='../static/Images/Notes/{{ note }}.png'>
+                        {% endfor %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
     <script src="{% static 'drawing.js' %}"></script>
     <script src="{% static 'rhythm_trainer.js' %}"></script>

@@ -31,11 +31,13 @@ ALLOWED_HOSTS = ['rhythmix.herokuapp.com']
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'Rhythmix.patterns',
 ]
 
 MIDDLEWARE = [
@@ -74,7 +76,12 @@ WSGI_APPLICATION = 'Rhythmix.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = { }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 
 # Password validation
@@ -111,7 +118,7 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
+# https://docs.djangoproject.com/en/1.11/howto/static-sfiles/
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
