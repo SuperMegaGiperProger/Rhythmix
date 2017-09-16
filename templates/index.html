@@ -94,15 +94,15 @@
         </form>
     </div>
     <div id="templates" class="clear vertShift">
-        <ul style="list-style-type: none; padding: 0; margin: 0">
+        <ul>
             {% for pattern in patterns %}
-                <li>
-                    <div class="template" onclick="reloadGame(event, {{ pattern.notes }})">
-                        {% for note in pattern.notes %}
-                            <img src='../static/Images/Notes/{{ note }}.png'>
-                        {% endfor %}
-                    </div>
-                </li>
+            <li>
+                <div class="template" onclick="setPattern(event, {{ pattern.notes }})">
+                    {% for note in pattern.notes %}
+                    <img src='../static/Images/Notes/{{ note }}.png'>
+                    {% endfor %}
+                </div>
+            </li>
             {% endfor %}
         </ul>
     </div>
@@ -111,7 +111,7 @@
 </article>
 <footer>
     There'll be more features soon<br>
-    Have a question? Write here thrashmetalfan98@gmail.com<br>
+    Have you got a question? Email to thrashmetalfan98@gmail.com<br>
     This project is entirely open source. If you are a developer, consider contributing to this project <a
         href="https://github.com/SuperMegaGiperProger/Rhythmix" target="_blank" onclick="stopGame()">here</a>.
 </footer>

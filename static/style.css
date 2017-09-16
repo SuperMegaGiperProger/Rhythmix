@@ -122,6 +122,12 @@ a:focus, a:active {
     width: 200px;
 }
 
+#templates ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
 .template > img {
     height: 40px;
 }

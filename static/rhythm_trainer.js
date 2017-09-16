@@ -165,11 +165,19 @@ function stopGame() {
     game.stop();
 }
 
-function reloadGame(event, note_pattern = undefined) {
+function reloadGame(event) {
     event.stopPropagation();
-    game.pattern = {notes: note_pattern};
     if (game.cycle !== undefined) {
         stopGame();
         startGame();
+        return true;
     }
+    return false;
+}
+
+function setPattern(event, note_pattern = undefined) {
+    game.pattern = {notes: note_pattern};
+    $('div.template').css('background-color', 'white');
+    event.currentTarget.style.background = '#A5D7A7';
+    if (!reloadGame(event)) startGame();
 }
