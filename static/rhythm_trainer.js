@@ -1,12 +1,15 @@
 function TapInspector(interval, signature, time_pattern) {
-    function search(val, left = 0, arr = time_pattern, right = arr.length - 1) { //it must be replaced on O(1) search !!!!!!
-        while (left < right) {
-            var mid = (left + right) / 2;
-            mid = Math.floor(mid);
-            if (val > arr[mid]) left = mid + 1;
-            else right = mid;
-        }
-        return val - arr[left] < arr[right] - val ? left : right;
+    function search(val, left = 0, arr = time_pattern, right = arr.length - 1) {
+        // while (left < right) {
+        //     var mid = (left + right) / 2;
+        //     mid = Math.floor(mid);
+        //     if (arr[mid] < val) left = mid;
+        //     else right = mid;
+        // }
+        // return val - arr[left] < arr[right] - val ? left : right;
+        var mn = left;
+        while (mn <= right && val - arr[mn] > 0) ++mn;
+        return mn > right ? right : val - arr[mn - 1] < arr[mn] - val ? mn - 1 : mn;
     }
 
     var startTime = Date.now();
