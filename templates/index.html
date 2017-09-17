@@ -20,8 +20,18 @@
     <h2 style="word-wrap: break-word">Just hit the metronome!</h2>
 </header>
 <article class="bold">
-    <div id="tapLine" class="vertShift clear">
-        <canvas id="usertaps" height="30" width="700" style="max-width: 700px"></canvas>
+    <div id="actionZone" class="vertShift">
+        <div id="patternLine" class="clear">
+            <svg width="700" height="50">
+                <line x1="0" y1="35" x2="620" y2="35" style="stroke: black"></line>
+            </svg>
+            <br>
+            <div id="notes" class="clear">
+            </div>
+        </div>
+        <div id="tapLine" class="clear" style="position: relative; display: block; top: -53px">
+            <canvas id="usertaps" height="30" width="700" style="max-width: 700px"></canvas>
+        </div>
     </div>
     <div class="clear">
         <div id="mainBtns">
@@ -31,8 +41,8 @@
                onkeypress="event.preventDefault()"
                onkeyup="event.preventDefault()"
             ><b>Play</b></a>
-            <a class="round" id="templateBtn" style=""
-               onclick="openTemplates(event)"
+            <a class="round" id="patternBtn" style=""
+               onclick="openpatterns(event)"
                onkeydown="event.preventDefault()"
                onkeypress="event.preventDefault()"
                onkeyup="event.preventDefault()"
@@ -93,11 +103,11 @@
             </div>
         </form>
     </div>
-    <div id="templates" class="clear vertShift">
+    <div id="patterns" class="clear vertShift">
         <ul>
             {% for pattern in patterns %}
             <li>
-                <div class="template" onclick="setPattern(event, {{ pattern.notes }})">
+                <div class="pattern" onclick="setPattern(event, {{ pattern.notes }})">
                     {% for note in pattern.notes %}
                     <img src='../static/Images/Notes/{{ note }}.png'>
                     {% endfor %}
@@ -106,8 +116,8 @@
             {% endfor %}
         </ul>
     </div>
-    <script src="{% static 'drawing.js' %}"></script>
     <script src="{% static 'rhythm_trainer.js' %}"></script>
+    <script src="{% static 'drawing.js' %}"></script>
 </article>
 <footer>
     There'll be more features soon<br>

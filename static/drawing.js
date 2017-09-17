@@ -6,6 +6,7 @@ function scaleByWidth(elem, width) {
 
 function fullUserTapsLine() {
     scaleByWidth(document.getElementById('usertaps'), '100%');
+    drawPattern(game.pattern);
 }
 
 fullUserTapsLine();
@@ -23,6 +24,7 @@ function show(jqelem, height = 'auto') {
 }
 
 function openSettings(event) {
+    closepatterns(event);
     show($("#settings"));
     $('#setBtn')
         .unbind('click', openSettings)
@@ -38,19 +40,20 @@ function closeSettings(event) {
     event.stopPropagation()
 }
 
-function openTemplates(event) {
-    show($('#templates'));
-    $('#templateBtn')
-        .unbind('click', openTemplates)
-        .bind('click', closeTemplates);
+function openpatterns(event) {
+    closeSettings(event);
+    show($('#patterns'));
+    $('#patternBtn')
+        .unbind('click', openpatterns)
+        .bind('click', closepatterns);
     event.stopPropagation()
 }
 
-function closeTemplates(event) {
-    hide($("#templates"));
-    $('#templateBtn')
-        .unbind('click', closeTemplates)
-        .bind('click', openTemplates);
+function closepatterns(event) {
+    hide($("#patterns"));
+    $('#patternBtn')
+        .unbind('click', closepatterns)
+        .bind('click', openpatterns);
     event.stopPropagation()
 }
 
@@ -81,6 +84,19 @@ function drawTapCycle(part, valid) {
     drawCicle(dx + tap_line_length * part, y, 6, valid ? 'lime' : 'red', userCanvContext);
 }
 
+function drawNote(note, line, part) {
+    line.append('<img class="note" src="../static/Images/Notes/' + note.toString() + '.png" style="left: ' + (part * 100).toString() + '%">');
+}
+
+function drawPattern(pattern) {
+    var line = $('#notes');
+    line.html('');
+    if (!('part' in pattern)) return;
+    for (var i in pattern.notes) {
+        drawNote(pattern.notes[i], line, pattern.part[i]);
+    }
+}
+
 function clearTapLine(signature, part_pattern) {
     userCanvContext.clearRect(0, 0, usertaps.width, usertaps.height);
     var lip = 30; //px
@@ -93,12 +109,14 @@ function clearTapLine(signature, part_pattern) {
             drawLine(x, y - width, x, y + width, 'black', userCanvContext);
         }
     }
-    function drawPattern(part_pattern, width = 30) {
+    function drawPatternLines(part_pattern, width = 30) {
         for (var i in part_pattern) {
             var x = part_pattern[i] * tap_line_length + dx;
-            drawLine(x, y - width, x, y + width, 'LightSeaGreen', userCanvContext);
+            drawLine(x, y - width, x, y + width, '#4CAF50', userCanvContext);
+            //drawNote('2', part_pattern[i]);
         }
     }
-    drawPattern(part_pattern);
+    drawPatternLines(part_pattern);
     drawMetrBeats();
 }
+

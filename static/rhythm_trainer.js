@@ -78,6 +78,7 @@ function Cycle(interval, signature = {note_value: 4, beats_num: 4}, pattern = un
     };
 
     pattern.getTimeNPart();
+    drawPattern(pattern);
 
     var metr = new Metronome(interval, signature);
     var insp = new TapInspector(interval, signature, pattern.time);
@@ -112,10 +113,10 @@ function Cycle(interval, signature = {note_value: 4, beats_num: 4}, pattern = un
 
 var game = {
     cycle: undefined,
-    pattern: undefined,
+    pattern: {notes: [4, 4, 4, 4]},
     playBtn: {
         elem: $('#playBtn'),
-        cell: $('#tapLine'),
+        cell: $('#actionZone'),
         play: function () {
             this.elem
                 .unbind('click', stopGame)
@@ -128,7 +129,7 @@ var game = {
                 .unbind('click', startGame)
                 .html('<b>Stop</b>')
                 [0].onclick = stopGame; // .bind doesn't work
-            show(this.cell, '30px');
+            show(this.cell, '100px');
         }
     },
     start: function () {
@@ -177,7 +178,7 @@ function reloadGame(event) {
 
 function setPattern(event, note_pattern = undefined) {
     game.pattern = {notes: note_pattern};
-    $('div.template').css('background-color', 'white');
+    $('div.pattern').css('background-color', 'white');
     event.currentTarget.style.background = '#A5D7A7';
     if (!reloadGame(event)) startGame();
 }
